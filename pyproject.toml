@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openenv-customer_support"
+version = "0.1.0"
+description = "Customer Support Resolution environment for OpenEnv — realistic multi-step ticket resolution RL benchmark"
+requires-python = ">=3.10"
+dependencies = [
+    "openenv-core[core]>=0.2.2",
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.27.0",
+    "pydantic>=2.0.0",
+    "openai>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "httpx>=0.27.0",
+]
+
+[project.scripts]
+server = "customer_support_env.server.app:main"
+
+[tool.setuptools]
+include-package-data = true
+packages = ["customer_support_env", "customer_support_env.server"]
+package-dir = { "customer_support_env" = ".", "customer_support_env.server" = "server" }

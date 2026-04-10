@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+=4.0.0
+ui.py
