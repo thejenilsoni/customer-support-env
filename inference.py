@@ -218,9 +218,11 @@ def run_task(env: CustomerSupportEnvironment, task_name: str) -> None:
             pass
 
         if started:
+            # Task score = last reward (grader score on terminal step)
+            score = max(0.001, min(0.999, rewards[-1])) if rewards else 0.001
             rewards_str = ",".join(f"{r:.2f}" for r in rewards)
             print(
-                f"[END] success={str(success).lower()} steps={step} rewards={rewards_str}",
+                f"[END] success={str(success).lower()} steps={step} score={score:.3f} rewards={rewards_str}",
                 flush=True,
             )
 
