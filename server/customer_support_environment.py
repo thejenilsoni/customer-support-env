@@ -41,8 +41,9 @@ class CustomerSupportEnvironment(
     def __init__(self, transform=None, rubric=None):
         super().__init__(transform=transform, rubric=rubric)
         self._tasks = build_tasks()
-        self._task: Optional[Task] = None
-        self._episode_id: Optional[str] = None
+        # Auto-initialize with default task so step() works without prior reset()
+        self._task: Task = self._tasks["easy_refund"]
+        self._episode_id: str = str(uuid.uuid4())
         self._step_count: int = 0
         self._lookups_done: Set[str] = set()
         self._done: bool = False
@@ -85,9 +86,6 @@ class CustomerSupportEnvironment(
         timeout_s: Optional[float] = None,
         **kwargs,
     ) -> SupportObservation:
-        if self._task is None:
-            raise RuntimeError("Call reset() before step().")
-
         if self._done:
             return SupportObservation(
                 ticket_id=self._task.ticket_id,
@@ -136,8 +134,8 @@ class CustomerSupportEnvironment(
         return SupportState(
             episode_id=self._episode_id or "",
             step_count=self._step_count,
-            task_name=self._task.name if self._task else "",
-            task_difficulty=self._task.difficulty if self._task else "",
+            task_name=self._task.name,
+            task_difficulty=self._task.difficulty,
             is_done=self._done,
         )
 
